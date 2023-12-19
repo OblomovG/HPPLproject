@@ -8,9 +8,10 @@ import server
 #     last_msg = None
 #     app = Flask("Dash app data server")
 
+
 #     @app.route("/<slot_name>", methods=["POST"])
 #     def hello(slot_name):
-#         print("LOOOOOOOOOOOOOOOOOOL")
+#         print("LOOOOOOOOOOOOOOOOL")
 #         data = json.loads(request.data)
 #         last_msg = [slot_name, data]
 #         print(data)
@@ -18,47 +19,44 @@ import server
 
 #     app.run(debug=True)
 
-
 # run_data_server()
-
 
 def run_data_server(data_base):
     app = Flask("Dash app data server")
 
     def generate_empy_slot():
         slot = dict(
-            x=[],
-            y=[],
+            X=[],
+            Y=[],
         )
         return slot
 
     def generate_slot_in_db(name):
         slot = generate_empy_slot()
-        data_base[name] = slot
+        DataBase[name] = slot
 
     @app.route("/<slot_name>", methods=["POST"])
     def hello(slot_name):
-        if slot_name not in data_base.keys():
+        if slot_name not in DataBase.keys():
             generate_slot_in_db(slot_name)
 
         data = json.loads(request.data)
-        db_slot = data_base[slot_name]
-        db_slot["x"] = np.hstack([db_slot["x"], data["x"]])
-        db_slot["y"] = np.hstack([db_slot["y"], data["y"]])
-        data_base[slot_name] = db_slot
+        db_slot = DataBase[slot_name]
+        db_slot[" X "] = np.hstack([db_slot[" X "], data[" X "]])
+        db_slot[" Y "] = np.hstack([db_slot[" Y "], data[" Y "]])
+        DataBase[slot_name] = db_slot
         return "1"
 
     app.run(debug=True)
 
-
 if __name__ == "__main__":
-    data_base = {}
+    DataBase = {}
     app = Flask("Dash app data server")
 
     def generate_empy_slot():
         slot = dict(
-            x=[],
-            y=[],
+            X=[],
+            Y=[],
             legend="None",
             title="None",
             active_in=[],
@@ -67,19 +65,19 @@ if __name__ == "__main__":
 
     def generate_slot_in_db(name):
         slot = generate_empy_slot()
-        data_base[name] = slot
+        DataBase[name] = slot
 
     @app.route("/<slot_name>", methods=["POST"])
     def hello(slot_name):
-        if slot_name not in data_base.keys():
+        if slot_name not in DataBase.keys():
             generate_slot_in_db(slot_name)
 
         data = json.loads(request.data)
-        db_slot = data_base[slot_name]
-        db_slot["x"] = np.hstack([db_slot["x"], data["x"]])
-        db_slot["y"] = np.hstack([db_slot["y"], data["y"]])
-        data_base[slot_name] = db_slot
-        # print(data_base)
+        db_slot = DataBase[slot_name]
+        db_slot[" X "] = np.hstack([db_slot[" X "], data[" X "]])
+        db_slot[" Y "] = np.hstack([db_slot[" Y "], data[" Y "]])
+        DataBase[slot_name] = db_slot
+        # print(DataBase)
         return "1"
 
-    server.run_UI_server(app, data_base)
+    server.run_UI_server(app, DataBase)
