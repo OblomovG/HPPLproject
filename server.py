@@ -1,5 +1,4 @@
 from uuid import uuid4
-
 import dash_bootstrap_components as dbc
 import plotly.graph_objects as go
 from dash import (
@@ -138,6 +137,7 @@ def run_UI_server(server, data):
             return new_children
 
         #### create a new graph ####
+        
         if add_graph is None or port_id is None:
             return no_update
 
@@ -193,17 +193,18 @@ def run_UI_server(server, data):
                 data_pointer = data[port_id]
                 break
         if data_pointer is None:
-            raise Exception("LOOOL")
+            raise Exception("lol")
 
-        x = data_pointer["x"]
-        y = data_pointer["y"]
+        X = data_pointer[" X "]
+        Y = data_pointer[" Y "]
 
-        fr = generate_fig(x, y)
+        fr = generate_fig(X, Y)
         Serverside(fr)
         return fr
 
     ##-------------------------------- FOR plotly resample updates ------------------------------##
     # This method constructs the FigureResampler graph and caches it on the server side
+    
     @app.callback(
         Output({"type": "dynamic-graph", "index": MATCH}, "figure"),
         Output({"type": "store", "index": MATCH}, "data"),
@@ -214,16 +215,19 @@ def run_UI_server(server, data):
         prevent_initial_call=True,
     )
     def construct_display_graph(port_id, container_id) -> FigureResampler:
+        
         ## save index of active containers in data
+        
         container_index = container_id["index"]
         data_index = str(port_id)
         data[data_index]["active_in"].append(container_index)
 
         ## generate gfaph from data
+        
         port_data = data[data_index]
-        x = port_data["x"]
-        y = port_data["y"]
-        fr = generate_fig(x, y)
+        X = port_data[" X "]
+        Y = port_data[" Y "]
+        fr = generate_fig(X, Y)
         return fr, Serverside(fr)
 
     @app.callback(
